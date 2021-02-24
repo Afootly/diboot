@@ -7,6 +7,7 @@
     <typeAliases>
         <package name="pojo"/>
     </typeAliases>
+<!--    将映射配置文件写入主配置文件-->
     <mappers>
      <mapper resource="mapper/BooksMapper.xml"/>
     </mappers>

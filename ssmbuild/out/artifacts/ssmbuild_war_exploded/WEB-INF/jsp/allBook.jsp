@@ -68,6 +68,7 @@
                             <form action="/book/book/${books.bookID }" method="post">
                                 <input type="hidden" name="_method" value="DELETE">
                                 <input id="deletebtn" type="submit" class="" value="删除">
+<%--                                使用restful风格--%>
                             </form>
                             &nbsp;|&nbsp; <a href="/book/book/${books.bookID}">修改</a>
 
