@@ -87,6 +87,12 @@
             <version>${kotlin.version}</version>
             <scope>test</scope>
         </dependency>
+        <!--        pagehelper 分页-->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper</artifactId>
+            <version>5.0.0</version>
+        </dependency>
     </dependencies>
 <!--静态资源导出-->
     <build>

@@ -1,7 +1,9 @@
 package controller;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,11 +17,19 @@ import java.util.List;
 public class BookController {
     @Autowired
     private BookService bookService;
-//查询全部书籍,返回到展示页面
+    //查询全部书籍,返回到展示页面
     @GetMapping("/books")
-    public String list(Model model) {
+    //前端传入页码：pn ,
+    public String list( @RequestParam(value="pn",defaultValue = "1") Integer pn, Model model) {
+        //在查询前只需要调用，传入页码，每页的大小
+        PageHelper.startPage(pn,5);
         List<Books> list = bookService.queryAllBook();
-        model.addAttribute("list",list);
+        //使用PageInfo包装查询后的结果
+        //封装了详细的分页信息，包括有我们查询出来的数据
+        PageInfo pageInfo =new PageInfo(list,5);//传入连续显示的页数
+
+        model.addAttribute("pageinfo_list",pageInfo);
+
         return "allBook";
     }
     //来到书籍添加页面
