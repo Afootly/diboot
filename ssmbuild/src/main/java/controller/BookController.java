@@ -110,4 +110,10 @@ model.addAttribute("pageinfo_list",pageInfo);
 //        //由于@ResponseBody注解，这里会将str转成json格式返回；十分方便
 //        return str;
 //    }}
+    @RequestMapping("/tobooks")
+    public String tobooks(){
+        return "allBook";
+
+
+    }
 }

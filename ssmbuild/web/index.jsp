@@ -31,7 +31,7 @@
 </head>
 <body>
 <h2>
-    <a href="${pageContext.request.contextPath}/book/books">进入书籍页面</a>
+    <a href="${pageContext.request.contextPath}/book/tobooks">进入书籍页面</a>
 </h2>
 </body>
 </html>
