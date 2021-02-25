@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<!--导入thymeleaf名称空间-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+成功
+<div th:text="${name}">不经过解析</div>
+<hr/>
+<div th:text="${name}"></div>
+<div th:utext="${name}"></div>
+<hr/>
+<!--th:each每次都会生成一个当前的标签-->
+<h3   th:text="${user}" th:each="user:${users}"></h3>
+<hr/>
+<h3>
+    <span th:each="user:${users}">[[${user}]]</span>
+</h3>
+</body>
+</html>
