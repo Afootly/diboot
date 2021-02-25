@@ -27,6 +27,14 @@ public class Books {
         return detail;
     }
     public void setDetail(String detail) { this.detail = detail == null ? null : detail.trim(); }
+
+    public Books(Integer bookID, String bookName, Integer bookCounts, String detail) {
+        this.bookID = bookID;
+        this.bookName = bookName;
+        this.bookCounts = bookCounts;
+        this.detail = detail;
+    }
+
     @Override
     public String toString() {
         return "Books{" +
