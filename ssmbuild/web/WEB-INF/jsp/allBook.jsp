@@ -13,10 +13,15 @@
     <%
         pageContext.setAttribute("APP_PATH", request.getContextPath());
     %>
-
+<%--    <script type="text/javascript" src="${APP_PATH}/static/js/jquery-3.5.1.js"></script>--%>
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.js"></script>
     <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </head>
 <body>
+<!-- 添加书籍模态框-->
+<!-- Modal -->
+
 <div class="container">
     <div class="row clearfix">
         <div class="col-md-12 column">
@@ -28,21 +33,12 @@
             </div>
         </div>
     </div>
-    <div class="col-md-4 column" style="float: left">
-        <button type="button" class="btn btn-success">
-            <a style="text-decoration: none;color: azure" href="${APP_PATH}/book/toaddbookpage">添加书籍</a>
+    <div class="col-md-4 column" style="float: left" >
+        <button type="button" class="btn btn-success" id="book_add_modal_btn">
+            <a style="text-decoration: none;color: azure" href="#">添加书籍</a>
         </button>
     </div>
-    <div class="col-md-4 column">
-        <form action="${APP_PATH}/book/booklike" class="form-inline" method="post">
-            <div class="form-group">
-                <%--                <label for="exampleInputName2">Name</label>--%>
-                <input type="text" class="form-control" name="queryBookName" id="exampleInputName2"
-                       placeholder="请输入要要查询书籍的名称">
-            </div>
-            <button type="submit" class="btn btn-default">查询</button>
-        </form>
-    </div>
+
     <div class="row clearfix">
         <div class="col-md-12 column">
             <table class="table table-hover table-stript" id="books_table">
@@ -55,28 +51,9 @@
                     <td>书籍描述</td>
                     <td>编辑</td>
                 </tr>
-                <%--                <div  class="alert alert-danger" role="alert">...</div>--%>
                 </thead>
                 <tbody>
-                <%--                <c:forEach var="books" items="${pageinfo_list.list}">--%>
-                <%--                    <tr>--%>
-                <%--                        <td>${books.bookID}</td>--%>
-                <%--                        <td>${books.bookName}</td>--%>
-                <%--                        <td>${books.bookCounts}</td>--%>
-                <%--                        <td>${books.detail}</td>--%>
-                <%--                        <td>--%>
-                <%--                            <form action="/book/book/${books.bookID }" method="post">--%>
-                <%--                                <input type="hidden" name="_method" value="DELETE">--%>
-                <%--                                <input id="deletebtn" type="submit" class="" value="删除">--%>
-                <%--                                    &lt;%&ndash;                                使用restful风格&ndash;%&gt;--%>
-                <%--                            </form>--%>
-                <%--                            &nbsp;|&nbsp; <a href="/book/book/${books.bookID}">修改</a>--%>
 
-
-                <%--                        </td>--%>
-
-                <%--                    </tr>--%>
-                <%--                </c:forEach>--%>
                 </tbody>
             </table>
         </div>
@@ -84,45 +61,57 @@
     <div class="row">
         <%--        分页文字信息--%>
         <div class="col-md-6" id="page_info_area">
-
-
-            <%--            当前${pageinfo_list.pageNum}页，共${pageinfo_list.pages}页，共${pageinfo_list.total}条记录--%>
         </div>
         <%--    分页条信息--%>
         <div class="col-md-6" id="page_nav_area">
-            <%--            <nav aria-label="Page navigation">--%>
-            <%--                <ul class="pagination">--%>
-            <%--                    <li><a href="${APP_PATH}/book/books?pn=1">首页</a></li>--%>
-            <%--                    <c:if test="${pageinfo_list.hasPreviousPage}">--%>
-            <%--                        <li>--%>
-            <%--                            <a href="${APP_PATH}/book/books?pn=${pageinfo_list.pageNum-1}"--%>
-            <%--                               aria-label="Previous">--%>
-            <%--                                <span aria-hidden="true">&laquo;</span>--%>
-            <%--                            </a>--%>
-            <%--                        </li>--%>
-            <%--                    </c:if>--%>
+        </div>
+    </div>
+</div>
+<%--添加书籍模态框--%>
+<div class="modal fade" id="bookAddModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">书籍添加</h4>
+            </div>
+            <div class="modal-body">
+                <div class="container "   >
+<%--                    <div class="row clearfix">--%>
+<%--                        <div class="col-md-12 column">--%>
+<%--                            <div class="page-header">--%>
+<%--                                <h1>--%>
+<%--                                    <small>添加书籍</small>--%>
+<%--                                </h1>--%>
+<%--                            </div>--%>
+<%--                        </div>--%>
+<%--                    </div>--%>
+                    <div>
+                        <form  class="form-horizontal col-md-4"   >
 
-            <%--                    <c:forEach items="${pageinfo_list.navigatepageNums}" var="page_Num">--%>
-            <%--                        <c:if test="${page_Num==pageinfo_list.pageNum}">--%>
-            <%--                            <li class="active"><a href="#">${page_Num}</a></li>--%>
-            <%--                        </c:if>--%>
-            <%--                        <c:if test="${page_Num!=pageinfo_list.pageNum}">--%>
-            <%--                            <li><a href="${APP_PATH}/book/books?pn=${page_Num}">${page_Num}</a>--%>
-            <%--                            </li>--%>
-            <%--                        </c:if>--%>
-
-            <%--                    </c:forEach>--%>
-            <%--                    <c:if test="${pageinfo_list.hasNextPage}">--%>
-            <%--                        <li>--%>
-            <%--                            <a href="${APP_PATH}/book/books?pn=${pageinfo_list.pageNum+1}" aria-label="Next">--%>
-            <%--                                <span aria-hidden="true">&raquo;</span>--%>
-            <%--                            </a>--%>
-            <%--                        </li>--%>
-            <%--                    </c:if>--%>
-            <%--                    <li><a href="${APP_PATH}/book/books?pn=${pageinfo_list.pages}">末页</li>--%>
-            <%--                    <li>--%>
-            <%--                </ul>--%>
-            <%--            </nav>--%>
+                            <div class="form-group">
+                                <label>书籍名称</label>
+                                <input type="text" class="form-control" name="bookName"  placeholder="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label>书籍数量</label>
+                                <input type="text" class="form-control" name="bookCounts"   placeholder="quantity" required>
+                            </div>
+                            <div class="form-group ">
+                                <label>书籍描述</label>
+                                <input type="text" class="form-control" name="detail"  placeholder="description" required>
+                            </div>
+<%--                            <div class="form-group">--%>
+<%--                                <button type="submit" class="form-control">提交</button>--%>
+<%--                            </div>--%>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-success" id="book_save-btn">保存</button>
+            </div>
         </div>
     </div>
 </div>
@@ -140,8 +129,9 @@
     }
 
 </style>
-<script type="text/javascript" src="${APP_PATH}/static/js/jquery-3.5.1.js"></script>
 <script type="text/javascript">
+    //定义一个全局的总数据条数totalRecord，currentPage：当前页方便使用
+	var totalRecord,currentPage;
     //1、页面加载完成以后，直接去发送ajax请求,要到分页数据
     $(function () {
         //去首页
@@ -205,10 +195,15 @@
 
         $("#page_info_area").empty();
         $("#page_info_area").append("当前" + result.extend.pageinfo_list.pageNum + "页,总" +
-            result.extend.pageinfo_list.pages + "页,总" +
+            result.extend.pageinfo_list.pages + "页,共" +
             result.extend.pageinfo_list.total + "条记录");
-        totalRecord = result.extend.pageinfo_list.total;
         currentPage = result.extend.pageinfo_list.pageNum;
+        totalRecord = result.extend.pageinfo_list.total;
+        globalpages= result.extend.pageinfo_list.pages
+
+
+
+
     }
 
     //解析分页条
@@ -280,6 +275,45 @@
         var navEle = $("<nav></nav>").append(ul);
         navEle.appendTo("#page_nav_area");
     }
+    //点击添加书籍，弹出模态框
+    $("#book_add_modal_btn").click(function () {
+
+        $("#bookAddModal").modal({
+            backdrop:"static"
+        })
+
+
+    })
+    //保存按钮点击事件
+    $("#book_save-btn").click(function () {
+
+
+        //1.将模态框写入的数据交给服务器保存
+        //2.发送ajax请求保存员工
+//serialize()方法：将写写入的数据序列化再交给服务器
+
+        $.ajax({
+            url:"${APP_PATH}/book/book",
+            type: "POST",
+            data: $("#bookAddModal  form").serialize(),
+            success:function (result) {
+                alert(result.msg)
+                //关闭模态框
+                $("#bookAddModal").modal("hide")
+                //返回到添加后的最后一页
+                to_page(totalRecord);
+
+
+
+
+
+
+            }
+
+        })
+
+
+    })
 
 </script>
 </html>

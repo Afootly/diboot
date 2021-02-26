@@ -21,6 +21,7 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
+
     //查询全部书籍,返回到展示页面
     /*
     使用json改造数据返回形式
@@ -62,10 +63,14 @@ model.addAttribute("pageinfo_list",pageInfo);
     }
 
     //添加书籍
-    @RequestMapping("/book")
-    public String addBooks(Books books) {
+    @PostMapping ("/book")
+    @ResponseBody
+    public Msg addBooks(Books books) {
+        System.out.println(books);
         bookService.addBook(books);
-        return "allbook";
+
+        return  Msg.success();
+
     }
 
     //来到修改页面，查出当前员工，在页面回显

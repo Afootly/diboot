@@ -11,7 +11,7 @@
     <plugins>
         <plugin interceptor="com.github.pagehelper.PageInterceptor">
             <!--            分页参数合理化-->
-            <property name="reasonable" value="ture"/>
+            <property name="reasonable" value="false"/>
         </plugin>
 
     </plugins>
