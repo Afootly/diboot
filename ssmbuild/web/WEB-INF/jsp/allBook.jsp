@@ -10,6 +10,9 @@
 <html>
 <head>
     <title>booklist</title>
+    <%
+        pageContext.setAttribute("APP_PATH", request.getContextPath());
+    %>
 
     <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 </head>
@@ -27,11 +30,11 @@
     </div>
     <div class="col-md-4 column" style="float: left">
         <button type="button" class="btn btn-success">
-            <a style="text-decoration: none;color: azure" href="${pageContext.request.contextPath}/book/toaddbookpage">添加书籍</a>
+            <a style="text-decoration: none;color: azure" href="${APP_PATH}/book/toaddbookpage">添加书籍</a>
         </button>
     </div>
     <div class="col-md-4 column">
-        <form action="${pageContext.request.contextPath}/book/booklike" class="form-inline" method="post">
+        <form action="${APP_PATH}/book/booklike" class="form-inline" method="post">
             <div class="form-group">
                 <%--                <label for="exampleInputName2">Name</label>--%>
                 <input type="text" class="form-control" name="queryBookName" id="exampleInputName2"
@@ -89,10 +92,10 @@
         <div class="col-md-6" id="page_nav_area">
             <%--            <nav aria-label="Page navigation">--%>
             <%--                <ul class="pagination">--%>
-            <%--                    <li><a href="${pageContext.request.contextPath}/book/books?pn=1">首页</a></li>--%>
+            <%--                    <li><a href="${APP_PATH}/book/books?pn=1">首页</a></li>--%>
             <%--                    <c:if test="${pageinfo_list.hasPreviousPage}">--%>
             <%--                        <li>--%>
-            <%--                            <a href="${pageContext.request.contextPath}/book/books?pn=${pageinfo_list.pageNum-1}"--%>
+            <%--                            <a href="${APP_PATH}/book/books?pn=${pageinfo_list.pageNum-1}"--%>
             <%--                               aria-label="Previous">--%>
             <%--                                <span aria-hidden="true">&laquo;</span>--%>
             <%--                            </a>--%>
@@ -104,19 +107,19 @@
             <%--                            <li class="active"><a href="#">${page_Num}</a></li>--%>
             <%--                        </c:if>--%>
             <%--                        <c:if test="${page_Num!=pageinfo_list.pageNum}">--%>
-            <%--                            <li><a href="${pageContext.request.contextPath}/book/books?pn=${page_Num}">${page_Num}</a>--%>
+            <%--                            <li><a href="${APP_PATH}/book/books?pn=${page_Num}">${page_Num}</a>--%>
             <%--                            </li>--%>
             <%--                        </c:if>--%>
 
             <%--                    </c:forEach>--%>
             <%--                    <c:if test="${pageinfo_list.hasNextPage}">--%>
             <%--                        <li>--%>
-            <%--                            <a href="${pageContext.request.contextPath}/book/books?pn=${pageinfo_list.pageNum+1}" aria-label="Next">--%>
+            <%--                            <a href="${APP_PATH}/book/books?pn=${pageinfo_list.pageNum+1}" aria-label="Next">--%>
             <%--                                <span aria-hidden="true">&raquo;</span>--%>
             <%--                            </a>--%>
             <%--                        </li>--%>
             <%--                    </c:if>--%>
-            <%--                    <li><a href="${pageContext.request.contextPath}/book/books?pn=${pageinfo_list.pages}">末页</li>--%>
+            <%--                    <li><a href="${APP_PATH}/book/books?pn=${pageinfo_list.pages}">末页</li>--%>
             <%--                    <li>--%>
             <%--                </ul>--%>
             <%--            </nav>--%>
@@ -137,31 +140,34 @@
     }
 
 </style>
-<script type="text/javascript" src="${pageContext.request.contextPath}/static/js/jquery-3.5.1.js"></script>
+<script type="text/javascript" src="${APP_PATH}/static/js/jquery-3.5.1.js"></script>
 <script type="text/javascript">
+    //1、页面加载完成以后，直接去发送ajax请求,要到分页数据
     $(function () {
-        $.ajax({
-            url: "${pageContext.request.contextPath}/book/books",
-            data: "pn=1",
-            type: "GET",
-            success: function (result) {
-                // console.log(result)
-                //1.解析并且显示书本信息
-                build_books_table(result);
-
-                //2.解析并显示分页信息
-                build_page_info(result)
-
-                //3.并显示分页条
-                build_page_nav(result)
-
-
-            }
-        });
-
+        //去首页
+        to_page(1);
     });
 
+    function to_page(pn) {
+        $.ajax({
+            url: "${APP_PATH}/book/books",
+            data: "pn=" + pn,
+            type: "GET",
+            success: function (result) {
+                //console.log(result);
+                //1、解析并显示员工数据
+                build_books_table(result);
+                //2、解析并显示分页信息
+                build_page_info(result);
+                //3、解析显示分页条数据
+                build_page_nav(result);
+            }
+        });
+    }
+
     function build_books_table(result) {
+        //点击某页时，情况已经存在的数据
+        $("#books_table tbody").empty();
         // 拿到书籍列表
         var books = result.extend.pageinfo_list.list;
         console.log(books)
@@ -196,6 +202,7 @@
 
     //解析显示分页信息
     function build_page_info(result) {
+
         $("#page_info_area").empty();
         $("#page_info_area").append("当前" + result.extend.pageinfo_list.pageNum + "页,总" +
             result.extend.pageinfo_list.pages + "页,总" +
@@ -206,7 +213,73 @@
 
     //解析分页条
     function build_page_nav(result) {
+        //点击某页时，情况已经存在的数据
+        $("#page_nav_area").empty();
+        var ul = $("<ul></ul>").addClass("pagination");
+        //构建元素
+        //首页
+        var firstPageLi = $("<li></li>").append($("<a></a>").append("首页").attr("href", "#"));
+        //前一页
+        var prePageLi = $("<li></li>").append($("<a></a>").append("&laquo;"));
+        //判断是否还有前一页和首页，没有则不能点击
+        if (result.extend.pageinfo_list.hasPreviousPage == false) {
+            firstPageLi.addClass("disabled");
+            prePageLi.addClass("disabled");
+        } else {
+            //给跳转添加点击事件
+            firstPageLi.click(function () {
+                to_page(1);
+            })
+            if (result.extend.pageinfo_list.pageNum > result.extend.pageinfo_list.firstPage) {
+                prePageLi.click(function () {
+                    to_page(result.extend.pageinfo_list.pageNum - 1)
+                })
+            }
+        }
 
+
+        //下一页
+        var nextPageLi = $("<li></li>").append($("<a></a>").append("&raquo;"));
+        // 末页
+        var lastPageLi = $("<li></li>").append($("<a></a>").append("末页").attr("href", "#"));
+        //判断是否还有下一页
+        if (result.extend.pageinfo_list.hasNextPage == false) {
+            nextPageLi.addClass("disabled");
+            lastPageLi.addClass("disabled");
+        } else {
+            if (result.extend.pageinfo_list.pageNum < result.extend.pageinfo_list.pages) {
+                nextPageLi.click(function () {
+                    to_page(result.extend.pageinfo_list.pageNum + 1)
+
+                })
+            }
+            lastPageLi.click(function () {
+                to_page(result.extend.pageinfo_list.pages)
+
+            })
+
+        }
+
+        //ul添加首页和前一页
+        ul.append(firstPageLi).append(prePageLi)
+        //1，2，3 遍历给ul添加页码提示
+        $.each(result.extend.pageinfo_list.navigatepageNums, function (index, item) {
+            var numLi = $("<li></li>").append($("<a></a>").append(item));
+
+            if (result.extend.pageinfo_list.pageNum == item) {
+                numLi.addClass("active")
+            }
+            //给页面按钮添加点击实践
+            numLi.click(function () {
+                to_page(item);
+
+            })
+            ul.append(numLi);
+        })
+        ul.append(nextPageLi).append(lastPageLi)
+        var navEle = $("<nav></nav>").append(ul);
+        navEle.appendTo("#page_nav_area");
     }
+
 </script>
 </html>

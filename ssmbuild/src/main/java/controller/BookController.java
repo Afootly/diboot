@@ -65,7 +65,7 @@ model.addAttribute("pageinfo_list",pageInfo);
     @RequestMapping("/book")
     public String addBooks(Books books) {
         bookService.addBook(books);
-        return "redirect:/book/books";
+        return "allbook";
     }
 
     //来到修改页面，查出当前员工，在页面回显

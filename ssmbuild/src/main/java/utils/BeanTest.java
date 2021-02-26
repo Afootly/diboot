@@ -19,10 +19,11 @@ public class BeanTest {
             Package beanPackage = beanType.getPackage();
 
             Object bean = ctx.getBean(beanName);
-
-            System.out.println("BeanName:" + beanName);
-            System.out.println("Bean的类型：" + beanType);
+            System.out.println("*****************************");
+            System.out.println("名字:" + beanName);
+            System.out.println("类型：" + beanType);
             System.out.println("Bean所在的包：" + beanPackage);
+
 
         }
     }
