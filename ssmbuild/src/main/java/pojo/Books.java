@@ -1,7 +1,19 @@
 package pojo;
 
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
 public class Books {
     private Integer bookID;
+   // 用户名必须是2-5位中文或者6-16位英文和数字的组合
+//    @Pattern(regexp="(^[a-zA-Z0-9_-]{6,16}$)|(^[\\u2E80-\\u9FFF]{2,5})"
+//            ,message="书籍名称格式错误")
+   @NotNull
+   @Size(min = 1, max = 2)
     private String bookName;
     public Integer getBookID() {
         return bookID;
@@ -22,6 +34,7 @@ public class Books {
         this.bookCounts = bookCounts;
     }
     private Integer bookCounts;
+    @Email
     private String detail;
     public String getDetail() {
         return detail;

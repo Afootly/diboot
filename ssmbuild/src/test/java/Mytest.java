@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.UUID;
 
 public class Mytest {
+    @Autowired
+    private BookService bookService;
     //获取sqlsession
 //从spring注入原有的sqlSessionTemplate
 private     ClassPathXmlApplicationContext context =new ClassPathXmlApplicationContext("applicationContext.xml");
@@ -53,13 +55,22 @@ private     BooksMapper booksMapper = context.getBean(BooksMapper.class);
             String kid= UUID.randomUUID().toString().substring(0,5)+i;
             booksMapper.addBook(new Books(null,kid+"boookname",i,"描述"));
 
-
-
         }
+
     }
+    @Test
+    public void  test4(){
+//        List<Books> list = bookService.queryBookByName("java");
+        List<Books> list = booksMapper.queryBookByName("java");
+        System.out.println( list.size());
+        for (Books books:list){
+
+            System.out.println(books);
+        }
 
 
 
+    }
 
 
 }

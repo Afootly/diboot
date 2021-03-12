@@ -80,34 +80,26 @@
             </div>
             <div class="modal-body">
                 <div class="container ">
-                    <%--                    <div class="row clearfix">--%>
-                    <%--                        <div class="col-md-12 column">--%>
-                    <%--                            <div class="page-header">--%>
-                    <%--                                <h1>--%>
-                    <%--                                    <small>添加书籍</small>--%>
-                    <%--                                </h1>--%>
-                    <%--                            </div>--%>
-                    <%--                        </div>--%>
-                    <%--                    </div>--%>
+
                     <div>
-                        <form class="form-horizontal col-md-4" id="contentForm">
+                        <form class="form-horizontal col-md-4" id="addcontentForm">
 
                             <div class="form-group">
                                 <label>书籍名称</label>
                                 <input type="text" class="form-control" id="bookName" name="bookName" placeholder="name"
-                                       required>
+                                       required="required">
                                 <span class="help-block"></span>
                             </div>
                             <div class="form-group">
                                 <label>书籍数量</label>
                                 <input type="text" class="form-control" id="bookCounts" name="bookCounts"
-                                       placeholder="quantity" required>
+                                       placeholder="quantity" required="required">
                                 <span class="help-block"></span>
                             </div>
                             <div class="form-group ">
                                 <label>书籍描述</label>
                                 <input type="text" class="form-control" id="detail" name="detail"
-                                       placeholder="description" required>
+                                       placeholder="description" required="required">
                                 <span class="help-block"></span>
                             </div>
                             <%--                            <div class="form-group">--%>
@@ -120,6 +112,57 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
                 <button type="button" class="btn btn-success" id="book_save-btn">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<%--修改书籍模态框--%>
+<div class="modal fade" id="bookUpdateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" >员工修改</h4>
+            </div>
+            <div class="modal-body">
+                <div class="container ">
+                    <div>
+                        <form class="form-horizontal col-md-4" id="updatecontentForm">
+                            <div class="form-group">
+                                <label>id</label>
+                               <input type="text" class="form-control" id="bookName_update_static" name="bookID" placeholder="name"
+                                required="required" readonly>
+                                <span class="help-block"></span>
+                            </div>
+                            <div class="form-group">
+                                <label>书籍名称</label>
+                                <input type="text" class="form-control" id="bookName_update" name="bookName" placeholder="name"
+                                       required="required" >
+                                <span class="help-block"></span>
+                            </div>
+                            <div class="form-group">
+                                <label>书籍数量</label>
+                                <input type="text" class="form-control" id="bookCounts_update" name="bookCounts"
+                                       placeholder="quantity" required="required">
+                                <span class="help-block"></span>
+                            </div>
+                            <div class="form-group ">
+                                <label>书籍描述</label>
+                                <input type="text" class="form-control" id="detail_update" name="detail"
+                                       placeholder="description" required="required">
+                                <span class="help-block"></span>
+                            </div>
+                            <%--                            <div class="form-group">--%>
+                            <%--                                <button type="submit" class="form-control">提交</button>--%>
+                            <%--                            </div>--%>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-success" id="book_update-btn">修改</button>
             </div>
         </div>
     </div>
@@ -140,11 +183,12 @@
 </style>
 <script type="text/javascript">
     //定义一个全局的总数据条数totalRecord，currentPage：当前页方便使用
-    var totalRecord, currentPage, globalpages;
+        var totalRecord, currentPage, globalpages;
     //1、页面加载完成以后，直接去发送ajax请求,要到分页数据
     $(function () {
         //去首页
         to_page(1);
+
     });
 
     function to_page(pn) {
@@ -165,7 +209,7 @@
     }
 
     function build_books_table(result) {
-        //点击某页时，情况已经存在的数据
+        //点击某页时，清空0已经存在的数据
         $("#books_table tbody").empty();
         // 拿到书籍列表
         var books = result.extend.pageinfo_list.list;
@@ -215,7 +259,7 @@
 
     //解析分页条
     function build_page_nav(result) {
-        //点击某页时，情况已经存在的数据
+        //点击某页时，清空已经存在的数据
         $("#page_nav_area").empty();
         var ul = $("<ul></ul>").addClass("pagination");
         //构建元素
@@ -271,7 +315,7 @@
             if (result.extend.pageinfo_list.pageNum == item) {
                 numLi.addClass("active")
             }
-            //给页面按钮添加点击实践
+            //给页面按钮添加点击事件
             numLi.click(function () {
                 to_page(item);
 
@@ -289,7 +333,27 @@
         $("#bookAddModal").modal({
             backdrop: "static"
         })
+    });
+   //校验用户名是否存在
+    $("bookName").change(function () {
+        //发送ajax请求验证用户是否可用
+        var BookName=this.value();
+        $.ajax({
+            url:"${APP_PATH}/checkbook",
+            data:"BookName="+BookName,
+            type:"GET",
+            success:function (result) {
+                if (result.code==100){
+                    show_validate_msg($("#bookName"),"seccess","");
+                }else {
+                    show_validate_msg($("#bookName"),"error","用户名已存在");
+                }
+
+            }
+        })
+
     })
+
     //保存按钮点击事件
     $("#book_save-btn").click(function () {
         //1.将模态框写入的数据交给服务器保存
@@ -304,24 +368,36 @@
             type: "POST",
             data: $("#bookAddModal  form").serialize(),
             success: function (result) {
-                alert(result.msg)
-                //关闭模态框
-                $("#bookAddModal").modal("hide")
-                //返回到添加后的最后一页
-                to_page(globalpages);
-                //清除弹框后保留的数据
-                $('#bookAddModal').on('hidden.bs.modal', function () {
-                    document.getElementById("contentForm").reset();
-                });
+                //后端校验成功
+             if (result.code==100){
+                 console.log(result)
+                 //关闭模态框
+                 $("#bookAddModal").modal("hide")
+                 //返回到添加后的最后一页
+                 to_page(globalpages);
+                 //清除弹框后保留的数据
+                 $('#bookAddModal').on('hidden.bs.modal', function () {
+                     document.getElementById("contentForm").reset();
+                 });
+             }else {
+                 console.log(result)
+             }
+
+
             }
         })
     });
 
+
+
+
     //拿到校验的数据，使用正则表达式
+
     function validate_add_form(){
         //校验名称
         var bookName = $("#bookName").val();
         var regName = /(^[a-zA-Z0-9_-]{6,16}$)|(^[\u2E80-\u9FFF]{2,5})/;
+
         //每次进入应该清除表单的样式和数据
         if (!regName.test(bookName)) {
             // $("#bookName").parent().addClass("has-error")
@@ -334,8 +410,8 @@
             return true;
         }
         //校验邮箱
-        var detail = $("#bookCounts").val();
-        var regdetail =/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/
+        var detail = $("#detail").val();
+        var regdetail = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;
         if (!regdetail.test(detail)){
             // $("#bookCounts").parent().addClass("has-error");
             // $("#bookCounts").next("span").text("邮箱格式有误")
@@ -358,6 +434,79 @@
             $(ele).parent().addClass("has-error");
             $(ele).next("span").text(msg);
         }
+        // $("#bookName").mouseleave(function(){
+        //     alert("再见，您的鼠标离开了该段落。");
+        // });
     }
+    //在创建按钮之前就绑定了click,所以绑定不上
+    //可以在创建按钮的时候绑定。=》绑定点击live（）
+    //juery新版没有live.可以用 on进行 代替
+ $(document).on("click",".edit_btn",function () {
+     //1.查出书籍信息回显
+     getBook($(this).attr("edit-id"))
+     //把员工的id传递给模态框的更新按钮
+     $("#book_update-btn").attr("edit-id",$(this).attr("edit-id"))
+     //2弹出模态框
+     $("#bookUpdateModal").modal({
+         backdrop: "static"
+     })
+
+ })
+    function getBook(id) {
+        $.ajax({
+            url:"${APP_PATH}/book/book/"+id,
+            type:"GET",
+            success:function (result) {
+                var bookDate=result.extend.book;
+                $("#bookName_update_static").val(bookDate.bookID);
+                $("#bookName_update").val(bookDate.bookName);
+                $("#bookCounts_update").val(bookDate.bookCounts);
+                $("#detail_update").val(bookDate.detail);
+
+            }
+
+        })
+    }
+    //给修改按钮绑定事件
+
+    $("#book_update-btn").click(function () {
+        // //验证书籍名称是否合法
+        // //校验名称
+        // var bookName = $("#bookName_update").val();
+        // var regName = /(^[a-zA-Z0-9_-]{6,16}$)|(^[\u2E80-\u9FFF]{2,5})/;
+        //
+        // //每次进入应该清除表单的样式和数据
+        // if (!regName.test(bookName)) {
+        //     // $("#bookName").parent().addClass("has-error")
+        //     // $("#bookName").next("span").text("用户格式有误")
+        //     show_validate_msg($("#bookName_update"),"error","用户名格式有误");
+        //     return false;
+        // }else {
+        //     // $("#bookName").parent().addClass("has-success");
+        //     show_validate_msg($("#bookName_update"),"seccess","");
+        // }
+        //
+        // //发送请求修改书籍
+        alert("点击了")
+        console.log($("#updatecontentForm").serialize())
+        $.ajax({
+            url:"${APP_PATH}/book/book",
+            type:"PUT",
+            data: $("#bookUpdateModal form ").serialize(),
+            success:function (result) {
+                console.log(result)
+                //1.关闭模态框
+                $("#bookUpdateModal").modal("hide");
+                //2.回到本页面
+                to_page(currentPage)
+
+
+            }
+        })
+
+
+
+    })
+
 </script>
 </html>

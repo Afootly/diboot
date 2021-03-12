@@ -8,12 +8,17 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import pojo.Books;
 import service.BookService;
 import utils.Msg;
 
+import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/book")
@@ -61,33 +66,64 @@ model.addAttribute("pageinfo_list",pageInfo);
 
         return "addbooks";
     }
+   // 校验添加的书籍是否已经存在
+    @ResponseBody
+    @RequestMapping("/checkbook")
+    public Msg checkbook(@RequestParam("BookName") String BookName){
+        List<Books> list = bookService.queryBookByName(BookName);
+        if (list.size()==0){
+            return Msg.success();
+        }else {
+            return Msg.fail();
+        }
+
+    }
 
     //添加书籍
     @PostMapping ("/book")
     @ResponseBody
-    public Msg addBooks(Books books) {
-        System.out.println(books);
-        bookService.addBook(books);
+    //使用@Valid校验后端封装的对象
+//            indingResult result(校验结果 )
+    public Msg addBooks(@Valid Books books, BindingResult result) {
 
-        return  Msg.success();
+        if (result.hasErrors()){
+            Map<String,Object> map=new HashMap<>();
+            //校验失败，返回失败信息
+            List<FieldError> Errors = result.getFieldErrors();
+            for (FieldError fieldErrors: Errors
+                 ) {
+                System.out.println("错误的字段名"+fieldErrors.getField() );
+                System.out.println("错误信息"+fieldErrors.getDefaultMessage());
+                map.put(fieldErrors.getField(),fieldErrors.getDefaultMessage());
+
+            }
+            return Msg.fail().add("errorFields",map);
+            }
+        else {
+            bookService.addBook(books);
+            return  Msg.success();
+        }
+
 
     }
 
     //来到修改页面，查出当前员工，在页面回显
     @GetMapping("/book/{id}")
-    public String toEditBookspage(@PathVariable("id") Integer id, Model model) {
-        Books books = bookService.queryBookById(id);
-        model.addAttribute("book", books);
-        return "editbook";
+    @ResponseBody
+    public Msg toEditBookspage(@PathVariable("id") Integer id, Model model) {
+        Books book = bookService.queryBookById(id);
+        return Msg.success().add("book",book);
     }
 
     //修改书籍
-    @RequestMapping(value = "/book", method = RequestMethod.PUT)
-    public String editbooks(Books books) {
-        int i = bookService.updateBook(books);
+    @ResponseBody
+    @PutMapping("/book")
+    public Msg  editbooks(Books books) {
+        System.out.println("调用的添加从控制器");
         System.out.println(books);
-        System.out.println(i);
-        return "redirect:/book/books";
+      bookService.updateBook(books);
+        return  Msg.success().add("book",books);
+
     }
 
     @DeleteMapping("/book/{id}")

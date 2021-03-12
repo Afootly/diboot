@@ -20,5 +20,7 @@ public interface BookService {
     List<Books> queryAllBook();
     //根据名称模糊查询
     List<Books>  queryBookNameLike(String BoookName);
+    //根据名称查询
+    List<Books> queryBookByName(String BookName);
 
 }

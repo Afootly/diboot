@@ -15,7 +15,6 @@
           <element id="library" level="project" name="Maven: javax.servlet:jstl:1.2" />
           <element id="library" level="project" name="Maven: org.mybatis:mybatis:3.5.2" />
           <element id="library" level="project" name="Maven: org.mybatis:mybatis-spring:2.0.2" />
-          <element id="library" level="project" name="Maven: org.springframework:spring-webmvc:5.1.9.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-aop:5.1.9.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-beans:5.1.9.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-context:5.1.9.RELEASE" />
@@ -26,11 +25,19 @@
           <element id="library" level="project" name="Maven: org.springframework:spring-jdbc:5.1.9.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-tx:5.1.9.RELEASE" />
           <element id="library" level="project" name="Maven: org.mybatis.generator:mybatis-generator-core:1.3.7" />
-          <element id="library" level="project" name="Maven: com.github.pagehelper:pagehelper:5.0.0" />
-          <element id="library" level="project" name="Maven: com.github.jsqlparser:jsqlparser:0.9.5" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.9.0" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.9.0" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-core:2.9.0" />
-          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.9.0" />
+          <element id="library" level="project" name="Maven: com.github.pagehelper:pagehelper:5.0.0" />
+          <element id="library" level="project" name="Maven: com.github.jsqlparser:jsqlparser:0.9.5" />
+          <element id="library" level="project" name="Maven: javax.validation:validation-api:1.1.0.Final" />
+          <element id="library" level="project" name="Maven: org.hibernate:hibernate-validator:5.4.1.Final" />
+          <element id="library" level="project" name="Maven: org.jboss.logging:jboss-logging:3.3.0.Final" />
+          <element id="library" level="project" name="Maven: com.fasterxml:classmate:1.3.1" />
+          <element id="library" level="project" name="Maven: javax.servlet.jsp:jsp-api:2.2" />
+          <element id="library" level="project" name="Maven: javax.servlet:servlet-api:2.5" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-webmvc:5.1.9.release" />
+          <element id="library" level="application" name="jquery" />
         </element>
       </element>
       <element id="javaee-facet-resources" facet="ssmbuild/web/Web" />

@@ -38,6 +38,10 @@
     <select id="queryBookNameLike" resultType="pojo.Books">
         SELECT * from ssmbuild.books where bookName like  concat('%',#{bookName},'%')
     </select>
+    <select id="queryBookByName" resultType="pojo.Books">
+        select * from ssmbuild.books
+        where bookName=#{bookName}
+    </select>
 
 </mapper>
 
